@@ -1,0 +1,129 @@
+## Documentation for Project 2
+### LEMP Stack (Linux, Nginx, MySQL, PHP)
+
+***In this project I used the Termius as my SSH client***
+
+Created an Ubuntu instance on AWS
+![instance](./images/lempstack/server_lunch.png)
+
+SSH into the account using `ssh -i <Your-private-key.pem> ubuntu@<EC2-Public-IP-address>`
+
+![ssh_lunch](./images/lempstack/ssh_lunch.png)
+
+### Installing Nginx Webserver
+
+Updated the server using `sudo apt update` then installed Nginx using `sudo apt install nginx`
+
+To ensure Nginx was correctly installed, ran `sudo systemctl status nginx` to display the status of the webserver.
+
+![systemctl_status`](./images/lempstack/systemctl_nginx.png)
+
+- ***The status shows Nginx is active (running).***
+
+To access the webserver from the web browser, opened a TCP port 80 on security group.
+
+![port_80_ssg](./images/lempstack/port_80.png)
+
+Tested the webserver locally using `curl http://localhost:80`
+or `curl http://127.0.0.1:80`
+
+![local_test](./images/lempstack/local_test.png)
+
+Accessed the webserver using `http://<Public-IP-Address>:80`
+
+![webserver](./images/lempstack/webserver.png)
+
+### Installing MySQL
+
+Installed MySQL database using `sudo apt install mysql-server`
+and logged in with `sudo mysql` to connect with MySQL Database server
+
+![mysql](./images/lempstack/mysql.png)
+
+Ran the recommened security script that comes pre-installed with MySQL. The script is to remove some insecure default settings and lock down access to my database system.
+
+First I set a password for the root user, using mysql_native_password as default authentication method. Set the password as `PassWord.1`
+
+I used `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'PassWord.1';` to archeive this.
+
+Then quit MySQL by typing `exit`
+
+Started the interactive script with `sudo mysql_secure_installation`. A series interactive questions were asked, I provided a Yes answer for all.
+
+Now I tested the database using `sudo mysql -p` to ensure thw password I supplied is working.
+
+![mysql_password](./images/lempstack/mysql_password.png) 
+- ***It worked***
+
+> Note: At the time of this writing, the native MySQL PHP library mysqlnd doesn’t support caching_sha2_authentication, the default authentication method for MySQL 8. For that reason, when creating database users for PHP applications on MySQL 8, you’ll need to make sure they’re configured to use mysql_native_password instead. We’ll demonstrate how to do that in Step 6.
+
+- ***MySQL server is now installed and secured.***
+
+### Installing PHP
+
+Nginx is installed serve my web content and MySQL installed to store and manage data. Will install PHP to process code and genterate dynamic content for the webserver.
+
+Nginx requires an external program to handle PHP processing and act as a bridge between the PHP interpreter iteself and the webserver. This allows for a better overall performace in most PHP based websites, but it requires additional configuration. Will install `php-fpm` and tell Nginx to pass PHP requests to this software for processing. Also will install `php-mysql`, a PHP module that allows PHP to communicate with MySQL-based database. Core PHP packages will automatically be installed as dependencies.
+
+Ran the two packages at once using, `sudo apt install php-fpm php-mysql`
+
+- ***PHP and all dependencies are now installed***
+
+### Configuring Nginx to use PHP Processor
+With Nginx we can create server blocks to host multiple domain on a single server. Will use `projectLEMP` as my domain name. The default directory to serve content is `/var/www/html` but will be creating a similar directory structure within the `/var/www/` for my domain website leaving the `/var/www/html` as the default directory to be served if a client request does not match any other sites.
+
+Created the my domain directory using `sudo mkdir /var/www/projectLEMP`.
+
+Next assigned ownership of the directory which will reference the current system user, using `sudo chown -R $USER:$USER /var/www/projectLEMP`
+
+Opened a new configuration file in Nginx's `sites-available` directory using `sudo vim /etc/nginx/sites-available/projectLEMP`
+
+Pasted the code below in the empty file
+
+> 
+    #/etc/nginx/sites-available/projectLEMP
+
+    server {
+        listen 80;
+        server_name projectLEMP www.projectLEMP;
+        root /var/www/projectLEMP;
+
+        index index.html index.htm index.php;
+
+        location / {
+        try_files $uri $uri/ =404;
+        }
+
+        location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+        }
+
+        location ~ /\.ht {
+        deny all;
+        }
+
+    }
+
+Activated the configuration by linking to the config file from Nginx's `site-enabled` directory using `sudo ln -s /etc/nginx/sites-available/projectLEMP /etc/nginx/sites-enabled/`
+
+Tested for syntax errors by typing `sudo nginx -t`
+
+![nginx-syntax-error](./images/lempstack/nginx-syntax-error.png)
+
+Used `sudo unlink /etc/nginx/sites-enabled/default` to disable default host that is currently configured to listen on port 80.
+
+Now did a systemctl reload `sudo systemctl reload nginx`
+
+Created an `index.html` file in the `/var/www/projectLEMP` directory to test the website.
+
+> 
+    sudo echo 'Hello LEMP from hostname' $(curl -s http://169.254.169.254/latest/meta-data/public-hostname) 'with public IP' $(curl -s http://169.254.169.254/latest/meta-data/public-ipv4) > /var/www/projectLEMP/index.html
+
+Tested the page using `http://<Public-IP-Address>:80`
+
+![website_test](./images/lempstack/website_test.png)
+
+- ***My LEMP stack is now fully configured.***
+
+### Testing PHP with Nginx
