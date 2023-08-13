@@ -42,7 +42,7 @@ and logged in with `sudo mysql` to connect with MySQL Database server
 
 Ran the recommened security script that comes pre-installed with MySQL. The script is to remove some insecure default settings and lock down access to my database system.
 
-First I set a password for the root user, using mysql_native_password as default authentication method. Set the password as `PassWord.1`
+First I set a password for the root user, using `mysql_native_password` as default authentication method. Set the password as `PassWord.1`
 
 I used `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'PassWord.1';` to archeive this.
 
@@ -177,9 +177,9 @@ Created a PHP script that connected to MYSQL and query for content after confirm
 
 > 
     <?php
-    $user = "example_user";
+    $user = "SOTech";
     $password = "PassWord.1";
-    $database = "example_database";
+    $database = "sukie_DB";
     $table = "todo_list";
 
     try {
@@ -195,6 +195,12 @@ Created a PHP script that connected to MYSQL and query for content after confirm
     }
 Accessed the page on the web browser using `http://<Public_domain_or_IP>/todo_list.php`
 
-I believe I got this error message because my database is password protected. 
+ 
 
 ![error](./images/lempstack/error.png)
+
+I got this error message because I did not change the value of username and database name on the `todo_list.php`. Fixed that and got the expected output.
+
+![todo_list](./images/lempstack/todolist_php.png)
+
+PHP environment is ready to connect and interact with MySQL server.
