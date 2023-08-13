@@ -127,3 +127,74 @@ Tested the page using `http://<Public-IP-Address>:80`
 - ***My LEMP stack is now fully configured.***
 
 ### Testing PHP with Nginx
+
+Tested the fully operational LEMP stack to ensure Nginx can correctly hand `.php` files off to PHP processor by creating a test PHP file in the document root. Opened a new file called `.info.php` within document root. `sudo vim /var/www/projectLEMP/info.php` and pasted the lines below into the new file. This PHP code will return information about the server.
+
+> 
+    <?php
+    phpinfo();
+
+Accesed this with `http://server_domain_or_IP/info.php`
+
+![php-info](./images/lempstack/php-info.png)
+
+Deleted the file after confirming the page ran. `sudo rm /var/www/projectLEMPinfo.php`
+
+### Retrieving data from MYSQL database with PHP
+Here I created a test database(DB) with a simple "To do list".Confirgured access to it so the Nginx website could query from the DB and display it.
+
+Created a new user with `mysql_native_password` authentication method in order to be able to connect to the MySQL database from PHP.
+
+Created a database called `sukie_DB` and user called `SOTech`
+
+Connected to the MySQL console using the root account; `sudo mysql -p` and entered the password provided earlier.
+
+Created a new DB with the following command from MySQL console, `mysql> CREATE DATABASE sukie_DB;`
+
+Granted the new user full privileges on the databese and defining this new user's password. `mysql>  CREATE USER 'SOTech'@'%' IDENTIFIED WITH mysql_native_password BY 'PassWord.1';`
+
+Granted the user permission over the DB using `mysql> GRANT ALL ON sukie_DB.* TO 'SOTech'@'%';`
+
+Then exited the console using `mysql> exit`
+
+Tested the Database by login back in with the new user using `mysql -u SOTech -p`
+
+![db_user](./images/lempstack/db_user.png)
+
+Confirmed access to the database using `mysql> SHOW DATABASES;`
+
+![DB](./images/lempstack/DB.png)
+
+Created a test table named `todo_list` with this command; `CREATE TABLE sukie_DB.todo_list (item_id INT AUTO_INCREMENT,content VARCHAR(255),PRIMARY KEY(item_id));`
+
+Inserted few content into the table using `mysql> INSERT INTO sukie_DB.todo_list (content) VALUES ("My first important item");` then replaced the value of **"My first important item"** 
+
+Confirmed the table was successfully saved using `mysql>  SELECT * FROM sukie_DB.todo_list;`
+
+![DB_items](./images/lempstack/DB_items.png)
+
+Created a PHP script that connected to MYSQL and query for content after confirming the table was saved successfully using `sudo vim /var/www/projectLEMP/todo_list.php`. Pasted the code below in the file
+
+> 
+    <?php
+    $user = "example_user";
+    $password = "PassWord.1";
+    $database = "example_database";
+    $table = "todo_list";
+
+    try {
+     $db = new PDO("mysql:host=localhost;dbname=$database", $user, $password);
+    echo "<h2>TODO</h2><ol>";
+    foreach($db->query("SELECT content FROM $table") as $row) {
+        echo "<li>" . $row['content'] . "</li>";
+    }
+    echo "</ol>";
+    } catch (PDOException $e) {
+        print "Error!: " . $e->getMessage() . "<br/>";
+        die();
+    }
+Accessed the page on the web browser using `http://<Public_domain_or_IP>/todo_list.php`
+
+I believe I got this error message because my database is password protected. 
+
+![error](./images/lempstack/error.png)
