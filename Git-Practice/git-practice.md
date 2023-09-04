@@ -1,4 +1,9 @@
-# Git Pratice Documentation
+# Git Practice Documentation
+
+### This is documentation is on issues I encountered while practicing on Git. On this project after committing from the work area to my local repository I was faced with some errors while trying to push my local repository to the remote repository.
+
+    This documentation is to illustrate how I was able to solve those errors.
+---
 
 - Committed all chages on the local repository using:
 `git commit -m ""added a new html file"`
