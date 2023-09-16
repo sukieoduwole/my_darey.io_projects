@@ -4,7 +4,7 @@
 Started this project by creating an Ubuntu Server on AWS. Connected to the instance using 
 `ssh -i <private-key-name>.pem ubuntu@<Public-IP-address>`
 
-![ubuntu_instance](./images/lampstack/ubuntu_instance.png)
+![ubuntu_instance](./images/ubuntu_instance.png)
 
 Updated the server using
 `sudo apt update`
@@ -15,19 +15,19 @@ Installed apache webserver software on the server using `sudo apt install apache
 
 Verified the package is working; `sudo systemctl status apache2`
 
-![apache_status](./images/lampstack/apache2_status.png)
+![apache_status](./images/apache2_status.png)
 
 For access to the webserver, added a rule for an inbound connection on the Security group of the instance for a TCP port 80
 
-![inbound_connection](./images/lampstack/SG_port80.png)
+![inbound_connection](./images/SG_port80.png)
 
 Checked the localhost on the ubuntu server using the command `curl http://localhost:80` or `curl http://127.0.0.1:80` the two commands do the same thing. They both use the *curl* command to request the Apache HTTP Server on port 80.
 
-![localhost:80](./images/lampstack/localhost-80.png)
+![localhost:80](./images/localhost-80.png)
 
 To the request the page on the internet, copied and pasted the public IP address of my instance on a web browser. Because HTTP runs on port 80, there's no need putting the port mapping of *:80*  i.e  3.83.101.251:80 on the web browser.
 
-![apache_output](./images/lampstack/Apache_output.png)
+![apache_output](./images/Apache_output.png)
 
 ### Installing MySQL Server
 
@@ -35,14 +35,14 @@ Installed MySQL using `sudo apt install mysql-server`
 
 Log in to MySQL server using `sudo mysql`
 
-![mysql](./images/lampstack/mysql.png)
+![mysql](./images/mysql.png)
 
 
 Going to run a security script that comes pre-installed with MySQL.This script will remove some defaut settings and lock down access to my database system. But before running the script I will set a password for the root user, using mysql_native_password as default authentication method. This user's password is defined as `PassWord.1`
 
 And exit MySQL with `exit` command
 
-![mysql_exit](./images/lampstack/mysql_exit.png)
+![mysql_exit](./images/mysql_exit.png)
 
 
 Started the interactive script by running 
@@ -53,7 +53,7 @@ Enter the root password `PassWord.1` here
 Next I confirmed I am not changing the root password. Typed Y for all other validation.
 
 
-![mysql_validation](./images/lampstack/mysql_validation.png)
+![mysql_validation](./images/mysql_validation.png)
 
 `Remove anonymous users? (Press y|Y for Yes, any other key for No) :`
 
@@ -63,12 +63,12 @@ Next I confirmed I am not changing the root password. Typed Y for all other vali
 
 `Reload privilege tables now? (Press y|Y for Yes, any other key for No) :`
 
-![sql_output](./images/lampstack/mysql_fianl_output.png)
+![sql_output](./images/mysql_fianl_output.png)
 
 To login with the configured credentials, use
 `sudo mysql -p`
 
-![alt text](./images/lampstack/mysql_validation_final.png)
+![alt text](./images/mysql_validation_final.png)
 
 ### Installing PHP
 
@@ -81,7 +81,7 @@ A `php-mysql`and `libapache2-mod-php` will be needed along with `php` to be inst
 
 `php -v` to confirm installation.
 
-![php](./images/lampstack/php_installed.png)
+![php](./images/php_installed.png)
 
 ***At this point, LAMP stack is installed and operational.***
 
@@ -100,11 +100,11 @@ Opened a new configuration file in Apache's `site-available` directory.
 
 `sudo vi /etc/apache2/sites-available/projectlamp.conf`
 
-![site-available](./images/lampstack/site-available.png)
+![site-available](./images/site-available.png)
 
 To confirm
 
-![site-available-conf](./images/lampstack/site-available-conf.png)
+![site-available-conf](./images/site-available-conf.png)
 
 `sudo a2ensite projectlamp` to enable the new virtual host.
 
@@ -114,13 +114,13 @@ Ran `sudo apache2ctl configtest` to make sure the configuration doesn't have syn
 
 Finally reload Apache using `systemctl reload apache2`
 
-![apache-finalstep](./images/lampstack/apache-final-step.png)
+![apache-finalstep](./images/apache-final-step.png)
 
 Next, created `index.html` in the directory `/var/www/projectlamp` and pasted 
 
 `sudo echo 'Hello LAMP from hostname' $(curl -s http://169.254.169.254/latest/meta-data/public-hostname) 'with public IP' $(curl -s http://169.254.169.254/latest/meta-data/public-ipv4) > /var/www/projectlamp/index.html` to test the virtual host works as expected.
 
-![site](./images/lampstack/website-functional.png)
+![site](./images/website-functional.png)
 
 
 ### Enabling PHP on the website
@@ -152,7 +152,7 @@ Create an `index.php` on the custom web root folder
 
 Refreshed the website
 
-![last](./images/lampstack/Final-page.png)
+![last](./images/Final-page.png)
 
 Removed the page using 
 `sudo rm /var/www/projectlamp/index.php`

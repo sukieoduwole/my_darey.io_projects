@@ -8,7 +8,7 @@ Created an Ubuntu instance on AWS
 
 SSH into the account using `ssh -i <Your-private-key.pem> ubuntu@<EC2-Public-IP-address>`
 
-![ssh_lunch](./images/lempstack/ssh_lunch.png)
+![ssh_lunch](./images/ssh_lunch.png)
 
 ### Installing Nginx Webserver
 
@@ -16,29 +16,29 @@ Updated the server using `sudo apt update` then installed Nginx using `sudo apt 
 
 To ensure Nginx was correctly installed, ran `sudo systemctl status nginx` to display the status of the webserver.
 
-![systemctl_status`](./images/lempstack/systemctl_nginx.png)
+![systemctl_status`](./images/systemctl_nginx.png)
 
 - ***The status shows Nginx is active (running).***
 
 To access the webserver from the web browser, opened a TCP port 80 on security group.
 
-![port_80_ssg](./images/lempstack/port_80.png)
+![port_80_ssg](./images/port_80.png)
 
 Tested the webserver locally using `curl http://localhost:80`
 or `curl http://127.0.0.1:80`
 
-![local_test](./images/lempstack/local_test.png)
+![local_test](./images/local_test.png)
 
 Accessed the webserver using `http://<Public-IP-Address>:80`
 
-![webserver](./images/lempstack/webserver.png)
+![webserver](./images/webserver.png)
 
 ### Installing MySQL
 
 Installed MySQL database using `sudo apt install mysql-server`
 and logged in with `sudo mysql` to connect with MySQL Database server
 
-![mysql](./images/lempstack/mysql.png)
+![mysql](./images/mysql.png)
 
 Ran the recommened security script that comes pre-installed with MySQL. The script is to remove some insecure default settings and lock down access to my database system.
 
@@ -52,7 +52,7 @@ Started the interactive script with `sudo mysql_secure_installation`. A series i
 
 Now I tested the database using `sudo mysql -p` to ensure thw password I supplied is working.
 
-![mysql_password](./images/lempstack/mysql_password.png) 
+![mysql_password](./images/mysql_password.png) 
 - ***It worked***
 
 > Note: At the time of this writing, the native MySQL PHP library mysqlnd doesn’t support caching_sha2_authentication, the default authentication method for MySQL 8. For that reason, when creating database users for PHP applications on MySQL 8, you’ll need to make sure they’re configured to use mysql_native_password instead. We’ll demonstrate how to do that in Step 6.
@@ -109,7 +109,7 @@ Activated the configuration by linking to the config file from Nginx's `site-ena
 
 Tested for syntax errors by typing `sudo nginx -t`
 
-![nginx-syntax-error](./images/lempstack/nginx-syntax-error.png)
+![nginx-syntax-error](./images/nginx-syntax-error.png)
 
 Used `sudo unlink /etc/nginx/sites-enabled/default` to disable default host that is currently configured to listen on port 80.
 
@@ -122,7 +122,7 @@ Created an `index.html` file in the `/var/www/projectLEMP` directory to test the
 
 Tested the page using `http://<Public-IP-Address>:80`
 
-![website_test](./images/lempstack/website_test.png)
+![website_test](./images/website_test.png)
 
 - ***My LEMP stack is now fully configured.***
 
@@ -136,7 +136,7 @@ Tested the fully operational LEMP stack to ensure Nginx can correctly hand `.php
 
 Accesed this with `http://server_domain_or_IP/info.php`
 
-![php-info](./images/lempstack/php-info.png)
+![php-info](./images/php-info.png)
 
 Deleted the file after confirming the page ran. `sudo rm /var/www/projectLEMPinfo.php`
 
@@ -159,11 +159,11 @@ Then exited the console using `mysql> exit`
 
 Tested the Database by login back in with the new user using `mysql -u SOTech -p`
 
-![db_user](./images/lempstack/db_user.png)
+![db_user](./images/db_user.png)
 
 Confirmed access to the database using `mysql> SHOW DATABASES;`
 
-![DB](./images/lempstack/DB.png)
+![DB](./images/DB.png)
 
 Created a test table named `todo_list` with this command; `CREATE TABLE sukie_DB.todo_list (item_id INT AUTO_INCREMENT,content VARCHAR(255),PRIMARY KEY(item_id));`
 
@@ -171,7 +171,7 @@ Inserted few content into the table using `mysql> INSERT INTO sukie_DB.todo_list
 
 Confirmed the table was successfully saved using `mysql>  SELECT * FROM sukie_DB.todo_list;`
 
-![DB_items](./images/lempstack/DB_items.png)
+![DB_items](./images/DB_items.png)
 
 Created a PHP script that connected to MYSQL and query for content after confirming the table was saved successfully using `sudo vim /var/www/projectLEMP/todo_list.php`. Pasted the code below in the file
 
@@ -197,10 +197,10 @@ Accessed the page on the web browser using `http://<Public_domain_or_IP>/todo_li
 
  
 
-![error](./images/lempstack/error.png)
+![error](./images/error.png)
 
 I got this error message because I did not change the value of username and database name on the `todo_list.php`. Fixed that and got the expected output.
 
-![todo_list](./images/lempstack/todolist_php.png)
+![todo_list](./images/todolist_php.png)
 
 PHP environment is ready to connect and interact with MySQL server.

@@ -4,7 +4,7 @@ This project is designed to pratcice some Linux commands. I will be listing seri
 
 `sudo apt upgrade`
 
-![Screenshot 2023-07-21 at 16 02 31](./images/linuxpractice/image_1.png)
+![Screenshot 2023-07-21 at 16 02 31](./images/image_1.png)
 
 
 
@@ -17,13 +17,13 @@ In this screenshot I used commands such as
 `vi` to edit the content of a file.
 `cat` to print on screen the content of a file.
 
-![Screenshot 2023-07-20 at 16 02 41](./images/linuxpractice/image_2.png)
+![Screenshot 2023-07-20 at 16 02 41](./images/image_2.png)
 
 
 Here I used `cp` to copy files from one directory to the other.
 `mv` moved and remnamed files. Made some errors while trying to move multiple files
 
-![Screenshot 2023-07-20 at 16 26 49](./images/linuxpractice/image_3.png)
+![Screenshot 2023-07-20 at 16 26 49](./images/image_3.png)
 
 
 
@@ -31,14 +31,14 @@ Here I used `cp` to copy files from one directory to the other.
 Used `rm` to delete files. `rmdir` to delete directory. `locate` to search for file. `sudo apt install` to install a package that was unavailable
 
 
-![Screenshot 2023-07-20 at 16 26 49](./images/linuxpractice/image_4.png)
+![Screenshot 2023-07-20 at 16 26 49](./images/image_4.png)
 
 
 
 Used `find` to search for a file in a particular directory. `grep` to search for a word in a file.
 
 
-![Screenshot 2023-07-21 at 08 49 50](./images/linuxpractice/image_5.png)
+![Screenshot 2023-07-21 at 08 49 50](./images/image_5.png)
 
 
 
@@ -50,10 +50,10 @@ diff Used this to display the difference between the content of two files
 `tar -cvf` used this to archive multiple files into a .TAR file
 
 
-![Screenshot 2023-07-21 at 09 05 57](./images/linuxpractice/image_6.png)
+![Screenshot 2023-07-21 at 09 05 57](./images/image_6.png)
 
 
-![Screenshot 2023-07-21 at 09 06 37](./images/linuxpractice/image_7.png)
+![Screenshot 2023-07-21 at 09 06 37](./images/image_7.png)
 
 
 
@@ -61,38 +61,38 @@ diff Used this to display the difference between the content of two files
 `jobs` For this command to work I created a `sleep job` (sleep 5m &) after I can now use the command to display the current running jobs.  
 
 
-![Screenshot 2023-07-21 at 09 34 54](./images/linuxpractice/image_8.png)
+![Screenshot 2023-07-21 at 09 34 54](./images/image_8.png)
 
 
 `ping` used this to check the connection of a network
 `wget` to download files from the internet
 
-![Screenshot 2023-07-21 at 09 38 31](./images/linuxpractice/image_9.png)
+![Screenshot 2023-07-21 at 09 38 31](./images/image_9.png)
 
 
 `uname -a`, `uname -s`, `uname -n` was used to display detailed infomation of Linux system including the hardware including the network and IP address.
 `top` displays the running process  and also to display the CPU utilization.
 
-![Screenshot 2023-07-21 at 09 40 59](./images/linuxpractice/image_10.png)
+![Screenshot 2023-07-21 at 09 40 59](./images/image_10.png)
 
-![Screenshot 2023-07-21 at 09 42 04](./images/linuxpractice/image_11.png)
+![Screenshot 2023-07-21 at 09 42 04](./images/image_11.png)
 
 
 
 `history` to display all used commands
 
-![Screenshot 2023-07-21 at 09 43 31](./images/linuxpractice/image_12.png)
+![Screenshot 2023-07-21 at 09 43 31](./images/image_12.png)
 
 
-![Screenshot 2023-07-21 at 09 48 54](./images/linuxpractice/image_13.png)
+![Screenshot 2023-07-21 at 09 48 54](./images/image_13.png)
 
 
-![Screenshot 2023-07-21 at 09 51 57](./images/linuxpractice/image_14.png)
+![Screenshot 2023-07-21 at 09 51 57](./images/image_14.png)
 
 
-![Screenshot 2023-07-21 at 10 09 58](./images/linuxpractice/image_15.png)
+![Screenshot 2023-07-21 at 10 09 58](./images/image_15.png)
 
 
-![Screenshot 2023-07-21 at 10 28 50](./images/linuxpractice/image_16.png)
+![Screenshot 2023-07-21 at 10 28 50](./images/image_16.png)
 
 
