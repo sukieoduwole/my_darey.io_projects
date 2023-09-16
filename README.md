@@ -1,2 +1,2 @@
 # dare.io_project1
-This is to document project on LAMP stack _project 1
+This repository document different project worked on while with Darey.io
