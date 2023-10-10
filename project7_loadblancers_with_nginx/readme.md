@@ -36,6 +36,7 @@ Configured Apache to serve a page showing its public IP. First I confirgued Apac
 ![listen_8000](./images/listen_8000.png)
 
 3.  Opened the file `/etc/apache2/sites-available/000-default.conf` and changed the port 80 on the virtualhost to 8000.
+
 ![port_8000](./images/port_8000.png)
 
 4.  Restart Apache to load the new configuration using the command
