@@ -5,8 +5,8 @@ Implement a Client-Server Architecture using MySQL Database Management System (D
 
 ### Implementation
 1. Created two EC2 instances in AWS with a keypair `mysql_KP`
-    - Server A name `mysql_server`
-    - Server B name `mysql_client`
+    - Instance A name `mysql_server`
+    - Instance B name `mysql_client`
 
 ![instances](./images/instances.png)
 
