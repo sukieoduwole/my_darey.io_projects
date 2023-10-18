@@ -2,7 +2,7 @@
 
 ## TASK
 
--   Provision two EC2 instances running ubuntu 22.04 and install apache webserver in them. 
+-   Provision two EC2 instances running ubuntu 22.04 and install apache webserver on them. 
 -   Open port 8000 to allow traffic from anywhere. 
 -   Update the default page of the webservers to display their public IP address.
 -   Provision another EC2 instance running ubuntu 22.04 with Nginx installed on it and configure it as a loadblancer distributing traffic across the webservers.
@@ -17,13 +17,13 @@ Opened port 8000 of the security group to allow traffic from anywhere
 ![security_group](./images/security_group.png)
 
 ### Step 3
-Connected to the instances via SSH using Termius. Updated the server and installed Apache on both instances using the command
+Connected to the instance via SSH using Termius. Updated the server and installed Apache using the command
 >
          sudo apt update -y && sudo apt install apache2 -y
 
 ![installation](./images/installation.png)
 
-Verified Apache is running using `sudo systemctl status apache2`
+Verified Apache is running and enabled on both servers using `sudo systemctl status apache2`
 ![apache_verified](./images/apache_verified.png)
 
 ### Step 4
@@ -34,14 +34,17 @@ Configured Apache to serve a page showing its public IP. First I confirgued Apac
                  sudo vim /etc/apache2/ports.conf
 2.  Added a new listen directive for port 8000
 ![listen_8000](./images/listen_8000.png)
+Save and exit using `Esc :wq!`
+
 
 3.  Opened the file `/etc/apache2/sites-available/000-default.conf` and changed the port 80 on the virtualhost to 8000.
 
 ![port_8000](./images/port_8000.png)
+Save and exit using `Esc :wq!`
 
-4.  Restart Apache to load the new configuration using the command
+4.  Restarted Apache to load the new configuration using the command
 >
-    sudo systemctl restart apache2
+                    sudo systemctl restart apache2
 
 ### Step 5
 - Created a new html file using `sudo vim index.html` and pasted the below html code
@@ -71,6 +74,8 @@ Overriding the default html file of Apache webserver
 
 - Restarted the webserver to load the new configuration with the command `sudo systemctl restart apache2`
 
+*Repeat Steps 3 to 6 on the other instance*
+
 ![my_apache_1](./images/my_apache_1.png)
 
 ![my_apache_2](./images/my_apache_2.png)
@@ -78,6 +83,8 @@ Overriding the default html file of Apache webserver
 ## Configuring Nginx as a Loadblancer
 ### Step 1
 - Provisioned a new ubuntu 22.04 EC2 instance with port 80 opened on the security group to allow traffic from anywhere.
+![port_80](./images/loadbalancer_SG.png)
+
 - SSH into the instance updated and installed Nginx using 
 >
             sudo apt update -y && sudo apt install nginx -y 
@@ -114,12 +121,12 @@ Pasted the below configuration in the file
         }
 ![loadbalacing_config](./images/loadbalacing_config.png)    
 *Note*
-- `Upstream backend_servers` defines a group of backend servers. The server line in the upstream block list the addresses and ports of the backend servers.
-- `proxy_pass` inside the `location` block sets up the loadblancing, passing the requests to the backend servers.
+- `Upstream backend_servers` context defines a group of backend servers. The server line in the upstream block list the addresses and ports of the backend servers.
+- `proxy_pass` directive inside the `location` block sets up the loadblancing, passing the requests to the backend servers.
 - `proxy_set_header` passes necessary headers to backend servers to correctly handle the requests.
 
 ### Step 3
-Tested the configuration using
+Ensured the configuration syntax is correct using
 >
                         sudo nginx -t
 ![config_check](./images/config_check.png)
@@ -130,5 +137,7 @@ Restarted Nginx with `sudo systemctl restart nginx`
 ### Step 5
 Pasted the public IP address of the Nginx server on a web browser
 ![final_result](./images/final_result.png)
+
+*Refresh the web browser to see the load balancer alternate the webservers by displaying its public IP-addresses*
 
 ### Project completed 
