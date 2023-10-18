@@ -147,7 +147,7 @@ The above script automates the installation and configuration of apache webserve
 *Note*
 The above script takes the IP address of the Nginx server, webserver 1, webserver 2 as an argument when running the command to execute the script.
 
-- Closed the file by typing `esc + shift + :wqa!`
+- Closed the file by typing `ESC :wqa!`
 - Gave the file an executable permission using `sudo chmod +x nginx.sh`
 - Ran the script with the command `./nginx.sh nginx_server_IP webserver_1_IP webserver_2_IP`
 
@@ -158,3 +158,5 @@ The above script takes the IP address of the Nginx server, webserver 1, webserve
 ![web_1](./images/web_1.png)
 
 ![web_2](./images/web_2.png)
+
+Project completed!!
