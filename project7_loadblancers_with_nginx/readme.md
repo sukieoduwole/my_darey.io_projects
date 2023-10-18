@@ -136,7 +136,9 @@ Restarted Nginx with `sudo systemctl restart nginx`
 
 ### Step 5
 Pasted the public IP address of the Nginx server on a web browser
+
 ![final_result](./images/final_result.png)
+
 
 *Refresh the web browser to see the load balancer alternate the webservers by displaying its public IP-addresses*
 
