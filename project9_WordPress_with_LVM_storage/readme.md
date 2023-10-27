@@ -56,6 +56,7 @@ Used `lsblk` utility to view the newly configured partition on the 3 disks.
 6. Installed `lvm2` package using 
 - `sudo yum install lvm2`
 - Ran `sudo lvmdiskscan` command to check for available partitions.
+
 ![lvm_disk_scan](./images/lvm_disk_scan.png)
 
 7. Used `pvcreate` utility to mark each of the 3 disks as physical volumes (PVs) to be used by `LVM` using the command:
@@ -149,6 +150,7 @@ All the existing data on `/var/log` will be deleted. That is why step 15 above i
 ![syntax_fstab](./images/syntax_fstab.png)
 
 23. Verified the setup by running `df -h`
+
 ![final_setup_output](./images/final_setup_output.png)
 
 ## Installing Wordpress and Configuring to use MySQL Database
@@ -198,6 +200,7 @@ Repeated all the steps above, from Step 1 to 23 to prepare the DB server and mou
 ![db_fstab](./images/db_fstab.png)
 
 2. Verified the setup using `df -h`
+
 ![db_final](./images/df_h_database.png)
 
 ### Updating and installing Wordpress on the webserver EC2
