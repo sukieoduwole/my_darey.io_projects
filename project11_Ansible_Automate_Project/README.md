@@ -386,9 +386,9 @@ Updated the playbook to run some tasks such as:
 >
     ---
     - name: update web, nfs and db servers
-      hosts: webservers, nfs, db
-      become: yes
-      tasks:
+    hosts: webservers, nfs, db
+    become: yes
+    tasks:
         - name: ensure wireshark is at the latest version
           yum:
             name: wireshark
@@ -410,13 +410,13 @@ Updated the playbook to run some tasks such as:
 
         - name: Create directory
           file:
-            path: /home/ubuntu/test-dir/
+            path: home/ubuntu/test-dir/
             state: directory
             mode: '0755'
 
         - name: Create file inside the directory
           file:
-            path: /home/ubuntu/test-dir/file.txt
+            path: home/ubuntu/test-dir/file.txt
             state: touch
             mode: '0644'
 
@@ -426,16 +426,33 @@ Updated the playbook to run some tasks such as:
         
         - name: Copy Nginx installation script to lb server
           copy:
-            src: /home/ubuntu/nginx-install.sh
-            dest: /tmp/nginx-install.sh
+            src:  /home/ubuntu/ansible-config-mgt/playbooks/nginx-install.sh
+            dest: home/ubuntu/test-dir/nginx-install.sh
             mode: '0755'
 
         - name: Execute Nginx installation script on lb server
-          shell: /tmp/nginx-install.sh
+          shell: home/ubuntu/test-dir/nginx-install.sh
           ignore_errors: true
 
 
 ![playbook-new](./images/playbook-new.png)
+
+*Note* I made the `common.yml` script install nginx using a script. For the script to work I had to place it in the playbook directory. And in the playbook I included the line 
+
+>
+    - name: Copy Nginx installation script to lb server
+          copy:
+            src:  /home/ubuntu/ansible-config-mgt/playbooks/nginx-install.sh
+            dest: home/ubuntu/test-dir/nginx-install.sh
+            mode: '0755'
+
+        - name: Execute Nginx installation script on lb server
+          shell: home/ubuntu/test-dir/nginx-install.sh
+          ignore_errors: true
+
+Note the `scr`; the source will be gotten from the `jenkins-ansible`server after its been pulled from the remote repository.
+
+![nginx](./images/nginx.png)
 
 ## Project Completed
 
