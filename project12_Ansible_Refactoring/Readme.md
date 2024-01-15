@@ -9,7 +9,7 @@ In this project I will continue working with [ansible-config-mgt](https://github
 In my case, I will move things around a little bit in the code, but the overal state of the infrastructure remains the same.
 
 ### Step 1 - Jenkins job enhancement
-Before I begin, some changes will be made to the Jenkins job - as it is now, every new change in the code create a separate directory which is not very convenient when I want to run some commands from one place. Besides, it consumes space on Jenkins serves with each subsequent change. I will enhance it by introducing a new Jenkins project/job - will require `Copy Artifact` plugin.
+Before I begin, some changes will be made to the Jenkins job - as it is now, every new change in the code create a separate directory which is not very convenient when I want to run some commands from one place. Besides, it consumes space on Jenkins serves with each subsequent change. I will enhance it by introducing a new Jenkins project/job - this will require `Copy Artifact` plugin.
 
 1. From the `Jenkins-Ansible` server, created a new directory called `ansible-config-artifact` - here I will store all artifacts after each build. 
 >
@@ -21,7 +21,7 @@ Before I begin, some changes will be made to the Jenkins job - as it is now, eve
 
 *Using 0777 gives full read, write, and execute permissions to everyone. While this command ensures that Jenkins (or any other user) can access and modify files within /home/ubuntu/ansible-config-artifact, it's important to consider the security implications of such open permissions, especially on sensitive directories.*
 
-3. Go to Jenkins web console -> Manage Jenkins ->  Plugins -> on Available plugins tab searched for `Copy Artifact` and installed this plugin without restarting Jenkins.
+3. From Jenkins web console -> Manage Jenkins ->  Plugins -> on the Available plugins tab, I searched for `Copy Artifact` and installed it without restarting Jenkins.
 
 ![copy-artifact](./images/copy-artifact.png)
 
@@ -35,15 +35,15 @@ Before I begin, some changes will be made to the Jenkins job - as it is now, eve
 
 ![build-trigger](./images/build-trigger.png)
 
-**Note:** You can configure number of builds to keep in order to save space on the server, for example, you might want to keep only last 2 or 5 build results. You can also make this change to your ansible job.
+**Note:** You can configure number of builds to keep in order to save space on the server, for example, you might want to keep only last 2 or 5 build results.
 
 6. The main idea of `save_artifacts` project is to save artifacts into `/home/ubuntu/ansible-config-artifact` directory. To achieve this, created a `Build step` and choose `Copy artifacts from other project`, specify `ansible` as a source project and `/home/ubuntu/ansible-config-artifact` as a target directory.
 
 ![build-step](./images/build-step.png)
 
-7. Tested the set up by making some change in `README.MD` file main branch of the `ansible-config-mgt` repository.
+7. Tested the set up by making some change in `README.MD` file main branch of the `ansible-config-mgt` repository. Pushed the changes to my remote repository.
 
-If both Jenkins jobs have completed one after another - you shall see your files inside /home/ubuntu/ansible-config-artifact directory and it will be updated with every commit to your main branch.
+If both Jenkins jobs have completed one after another - you shall see your files inside `/home/ubuntu/ansible-config-artifact` directory and it will be updated with every commit to your main branch.
 
 Now your Jenkins pipeline is more neat and clean.
 
@@ -57,13 +57,13 @@ Jenkins could not access `/home/ubuntu/ansible-config-artifact`, despite given f
 
 **How I corrected it**
 
-1. Gave ownership of `/home/ubuntu/` directory to `jenkins` as a user using `sudo chown -R jenkins:jenkins /home/ubuntu/`
+1. Gave ownership of `/home/ubuntu/` directory to `jenkins` as a user, using `sudo chown -R jenkins:jenkins /home/ubuntu/`
 
 ![ownership](./images/ownership.png)
 
 3. Adjusted the permissions on the `/home/ubuntu/ansible-config-artifact` directory using `sudo chmod -R 755 /home/ubuntu/ansible-config-artifact`
 
-4. Restarted Jenkins using `sudo service jenkins restart`
+4. Restarted Jenkins from the CLI using `sudo service jenkins restart`
 
 5. Returned the ownership of `/home/ubuntu` using `sudo chown -R ubuntu:ubuntu /home/ubuntu`
 
@@ -75,7 +75,7 @@ This is what the `/home/ubuntu` ownership looks like after the correction
 
 ### Step 2 - Refactor Ansible code by importing other playbooks into site.yml
 
-Before starting to refactor the codes, I created a new branch, name it refactor.
+Before starting to refactor the codes, I created a new branch, name it `refactor`.
 
 DevOps philosophy implies constant iterative improvement for better efficiency - refactoring is one of the techniques that can be used, but you always have an answer to question "why?". Why do we need to change something if it works well?
 
@@ -85,7 +85,7 @@ In [Project 11](https://github.com/sukieoduwole/my_darey.io_projects/blob/main/p
 
 Let see code re-use in action by importing other playbooks.
 
-1. Within playbooks folder, created a new file and name it `site.yml` - This file will now be considered as an entry point into the entire infrastructure configuration. Other playbooks will be included here as a reference. In other words, `site.yml` will become a parent to all other playbooks that will be developed. Including `common.yml` that was created previously.
+1. Within playbooks folder, created a new file and named it `site.yml` - This file will now be considered as an entry point into the entire infrastructure configuration. Other playbooks will be included here as a reference. In other words, `site.yml` will become a parent to all other playbooks that will be developed. Including `common.yml` that was created previously.
 
 2. Created a new folder in root of the repository and name it `static-assignments`. The `static-assignments` folder is where all other children playbooks will be stored. This is merely for easy organization of my work.
 
@@ -116,11 +116,10 @@ Your folder structure should look like this;
 
 ![structure](./images/structure.png)
 
-5. Ran `ansible-playbook` command against the `dev.yml` environment, using 
+5. Pushed all the chnages to my remote repository and pulled the changes from my remote repository to my `jenkins-ansible` server under the `ansible-config-mgt` directory and ran `ansible-playbook` command against the `dev.yml` environment, using 
 >
     ansible-playbook -i inventory/dev.yml playbooks/site.yml  
 
-Before then, I pushed all the changes made on my local machine to my remote repository.
 
 ![dev-playbook](./images/dev-playbook.png)
 
@@ -158,6 +157,8 @@ Updated `site.yml` with - `import_playbook: ../static-assignments/common-del.yml
 >
     ---
     - hosts: all
+    # - import_playbook: ../static-assignments/common.yml
+    
     - import_playbook: ../static-assignments/common-del.yml
 
 
@@ -172,13 +173,13 @@ and run it from the `jenkins-ansible` server against `dev` servers, using:
 
 Logged into one of the servers using `ssh <user>@<private-ip>` to ensure wireshark is deleted on all the servers by running `wireshark --version`.
 
-*Note:* Before running the command, I pushed the changes to the `refactor` branch and did a pull request to the main branch. On the `ansible-config-mgt` directory of the `jenkins-ansible` server, I pulled the up to date change of the code to the directory in order to run the command to delete the wireshark.
+*Note:* Before running the command, I pushed the changes to the `refactor` branch and did a pull request to the main branch. On the `ansible-config-mgt` directory of the `jenkins-ansible` server, I pulled the up to date changes of code to the directory in order to run the command to delete the wireshark.
 
 Now I have been able to use `import_playbooks` module and I have a ready solution to install/delete packages on multiple servers with just one command.
 
 ### Step 3 - Configuring UAT Webservers with a role 'Webserver'
 
-Now I have a nice and clean `dev` environment, so I will be configuring 2 new Web Servers as `uat`. I could write tasks to configure Web Servers in the same playbook, but it would be too messy, instead, I will use a dedicated role to make the configuration reusable.
+Now I have a nice and clean `dev` environment, so I will be configuring 2 new Web Servers as `uat`(user acceptance test). I could write tasks to configure Web Servers in the same playbook, but it would be too messy, instead, I will use a dedicated role to make the configuration reusable.
 
 1. Launched 2 fresh EC2 instances using RHEL OS, used them as my `uat servers`, so named accordingly - `Web1-UAT` and `Web2-UAT`.
 
@@ -186,7 +187,7 @@ Now I have a nice and clean `dev` environment, so I will be configuring 2 new We
 
 ![instances](./images/instances.png)
 
-2. To create a role, I created a directory called `roles/`, relative to the playbook file or in `/etc/ansible/` directory.
+2. To create a role, I created a directory called `roles`, relative to the playbook file or in `/etc/ansible/` directory.
 
 There are two ways to create this folder structure:
 
@@ -205,7 +206,7 @@ There are two ways to create this folder structure:
 
 **Note:** You can choose either way, but since you store all your codes in GitHub, it is recommended to create folders and files there rather than locally on Jenkins-Ansible server.
 
-The entire folder structure above looks like below. If created manually - you can skip creating tests, files, and vars or remove them if you used ansible-galaxy.
+The entire folder structure above looks like below. If created manually - you can skip creating `tests`, `files`, and `vars` or remove them if you used ansible-galaxy.
 
 >
     └── webserver
@@ -241,7 +242,7 @@ After removing unnecessary directories and files, the roles structure should loo
     │   └── main.yml
     └── templates
 
-3. Updated the inventory `ansible-config-mgt/inventory/uat.yml` file with IP addresses of the 2 UAT Web servers.
+3. Updated the inventory `ansible-config-mgt/inventory/uat.yml` file with the private IP addresses of the 2 UAT Web servers.
 
 >
     [uat-webservers]
@@ -250,7 +251,7 @@ After removing unnecessary directories and files, the roles structure should loo
 
 **NOTE:** Ensured using ssh-agent to ssh into the Jenkins-Ansible instance just as I did in [project 11](https://github.com/sukieoduwole/my_darey.io_projects/blob/main/project11_Ansible_Automate_Project/README.md)
 
-4. In `/etc/ansible/ansible.cfg` file uncomment `roles_path` string and provide a full path to your roles directory `roles_path = /home/ubuntu/ansible-config-mgt/roles`, so Ansible could know where to find configured roles.
+4. In `/etc/ansible/ansible.cfg` file uncomment `roles_path` string and provided a full path to the roles directory `roles_path = /home/ubuntu/ansible-config-mgt/roles`, so Ansible could know where to find configured roles.
 
 ![role-path](./images/role-path.png)
 
@@ -320,8 +321,8 @@ This is what I now have in `site.yml`
 
 >
     ---
-    - hosts: all
-    - import_playbook: ../static-assignments/common.yml
+    #- hosts: all
+    #- import_playbook: ../static-assignments/common.yml
 
     - hosts: uat-webservers
     - import_playbook: ../static-assignments/uat-webservers.yml
@@ -350,3 +351,5 @@ Both UAT Web servers are configured and you can be reached from a browser usiing
 The Ansible architecture now looks like this:
 
 ![final-architechture](./images/final-architechture.png)
+
+## End of Project
