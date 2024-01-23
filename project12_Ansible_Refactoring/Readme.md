@@ -73,6 +73,9 @@ This is what the `/home/ubuntu` ownership looks like after the correction
 
 ![jenkins-owner](./images/jenkins-owner.png)
 
+***Important Notice !!!**
+During the course of implementing this project, I later used a ubuntu 20.04 as my `jenkins-ansible` server. This took care of the problem I was getting with the permission error. With this OS all I did was gave `/home/ubuntu/ansible-config-artifact` the permission using `sudo chmod -R 0777 /home/ubuntu/ansible-config-artifact` without needing to go throught the route I explained above.*
+
 ### Step 2 - Refactor Ansible code by importing other playbooks into site.yml
 
 Before starting to refactor the codes, I created a new branch, name it `refactor`.
@@ -352,4 +355,25 @@ The Ansible architecture now looks like this:
 
 ![final-architechture](./images/final-architechture.png)
 
+**Note** I encountered this error while executing the playbook on the `uat` server using the import roles module.
+
+![playbook-error](./images/playbook-error.png)
+
+While looking through the warning given by Ansible, i.e `[WARNING]: Invalid characters were found in group names but not replaced,
+use -vvvv to see details`. I ran the playbook command again with the verbose 
+
+>
+    ansible-playbook -i /inventory/uat.yml playbooks/site.yml -vvvv
+
+This is what I got:
+
+![playbook-error2](./images/playbook-error2.png)
+
+Noticed that anisble can only recognise config from the `/home/ubuntu/ansible-config-mat/ansible.cfg` but not the `/etc/ansible/ansible.cfg` which contains the path to the ansible `roles`.
+
+I deleted the `/home/ubuntu/ansible-config-mat/ansible.cfg` and configured `/etc/ansible/ansible.cfg` to ignore host-key checking
+
+![host-key-checking](./images/host-key-checking.png)
+
+Another way I could do that is to include the roles path way in the `/home/ubuntu/ansible-config-mat/ansible.cfg` instead of deleting it. Therefore there will be no need for the `/etc/ansible/ansible.cfg`
 ## End of Project
