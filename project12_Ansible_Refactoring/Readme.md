@@ -376,4 +376,7 @@ I deleted the `/home/ubuntu/ansible-config-mat/ansible.cfg` and configured `/etc
 ![host-key-checking](./images/host-key-checking.png)
 
 Another way I could do that is to include the roles path way in the `/home/ubuntu/ansible-config-mat/ansible.cfg` instead of deleting it. Therefore there will be no need for the `/etc/ansible/ansible.cfg`
+
+![ansible-roles](./images/ansible-roles.png)
+
 ## End of Project
